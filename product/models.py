@@ -2,6 +2,9 @@ from django.db import models
 from base.manager import BaseManager
 from base.models import BaseModel
 from category.models import Category
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # Create your models here.
 class Products(BaseModel):
@@ -9,6 +12,7 @@ class Products(BaseModel):
     product_name = models.CharField(max_length=100)
     description = models.CharField(max_length=255)
     stock = models.IntegerField()
+    # created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     objects = BaseManager()
 

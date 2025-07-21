@@ -9,5 +9,3 @@ from base.views import BaseView
 class ProductView(BaseView):
     model = Products
     serializer_class = ProductSerializer
-
-

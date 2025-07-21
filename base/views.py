@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 # Create your views here.
 
@@ -8,6 +9,11 @@ from rest_framework.response import Response
 class BaseView(APIView):
     model = None
     serializer_class = None
+
+    def get_permissions(self):
+        if self.request.method in ['POST', 'DELETE', 'PUT']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
     def get(self, request, *args, **kwargs):
         obj_id = kwargs.get("id")
