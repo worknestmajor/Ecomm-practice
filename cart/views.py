@@ -7,6 +7,7 @@ from .models import Carts
 from .serializers import CartSerializer
 from product.models import Products
 
+from drf_spectacular.utils import extend_schema
 class CartView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -14,15 +15,19 @@ class CartView(APIView):
         cart = Carts.objects.filter(user=request.user)
         serializer = CartSerializer(cart, many=True)
         return Response(serializer.data)
+    
 
+    @extend_schema(
+            request=CartSerializer,
+            responses=CartSerializer,
+            description="Create Cart"
+    )
     def post(self, request):
         serializer = CartSerializer(data=request.data)
         if serializer.is_valid():
             product = serializer.validated_data['product']
             quantity = serializer.validated_data.get('quantity', 1)
-            
-            # Create or update cart item
-            cart_item, created = Carts.objects.update_or_create(
+            cart_item, created= Carts.objects.update_or_create(
                 user=request.user,
                 product=product,
                 defaults={'quantity': quantity}

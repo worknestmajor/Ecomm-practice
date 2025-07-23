@@ -12,7 +12,11 @@ class Products(BaseModel):
     product_name = models.CharField(max_length=100)
     description = models.CharField(max_length=255)
     stock = models.IntegerField()
+    price = models.IntegerField()
     # created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.product_name
 
     objects = BaseManager()
 

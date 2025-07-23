@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'category',
     'accounts',
     'rest_framework.authtoken',
-    'cart'
+    'cart',
+    'orders',
+    'drf_spectacular'
     
 ]
 
@@ -54,6 +56,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 MIDDLEWARE = [

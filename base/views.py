@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from base.permissions import IsSuperUser
 # Create your views here.
 
 
@@ -22,6 +22,7 @@ class BaseView(APIView):
             if obj:
                 serializer = self.serializer_class(obj)
                 return Response({"message":serializer.data})
+            return Response({"message": "No obj Found"})
         else:
             queryset = self.model.objects.get_all()
             serializer = self.serializer_class(queryset, many=True)
@@ -32,6 +33,7 @@ class BaseView(APIView):
         if serializer.is_valid():
             obj = self.model.objects.create_obj(**serializer.validated_data)
             return Response({"message":self.serializer_class(obj).data})
+        return Response(serializer.errors)
     
     def delete(self,request, *args, **kwargs):
         obj_id = kwargs.get("id")
