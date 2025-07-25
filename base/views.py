@@ -12,7 +12,7 @@ class BaseView(APIView):
 
     def get_permissions(self):
         if self.request.method in ['POST', 'DELETE', 'PUT']:
-            return [IsAuthenticated()]
+            return [IsAuthenticated(), IsSuperUser()]
         return [AllowAny()]
 
     def get(self, request, *args, **kwargs):

@@ -32,7 +32,7 @@ class CartView(APIView):
                 product=product,
                 defaults={'quantity': quantity}
             )
-            return Response(CartSerializer(cart_item).data, status=status.HTTP_201_CREATED)
+            return Response(CartSerializer(cart_item).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):

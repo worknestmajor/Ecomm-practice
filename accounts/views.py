@@ -16,8 +16,8 @@ class RegisterView(APIView):
         serializer = self.serializer_class(data= request.data)
         if serializer.is_valid():
             user = self.model.objects.create_user(**serializer.validated_data)
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({"message":self.serializer_class(user).data,"token":token.key})
+            # token, _ = Token.objects.get_or_create(user=user)
+            return Response({"message":self.serializer_class(user).data})
         return Response(serializer.errors)
     
 class InfoView(APIView):

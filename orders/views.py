@@ -6,6 +6,8 @@ from rest_framework import status
 from .models import Order
 from .serializers import OrderSerializer
 
+from drf_spectacular.utils import extend_schema
+
 class OrderView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -14,6 +16,10 @@ class OrderView(APIView):
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
 
+    @extend_schema(
+            request=OrderSerializer,
+            responses=OrderSerializer
+    )
     def post(self, request):
         serializer = OrderSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
