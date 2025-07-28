@@ -27,11 +27,16 @@ class CartView(APIView):
         if serializer.is_valid():
             product = serializer.validated_data['product']
             quantity = serializer.validated_data.get('quantity', 1)
-            cart_item, created= Carts.objects.update_or_create(
-                user=request.user,
-                product=product,
-                defaults={'quantity': quantity}
-            )
+            cart_item = Carts.objects.filter(user = request.user, product = product).first()
+            if cart_item:
+                cart_item.quantity += quantity
+                cart_item.save()
+            else:
+                cart_item = Carts.objects.create(
+                    product = product,
+                    quantity = quantity,
+                    user = request.user
+                )
             return Response(CartSerializer(cart_item).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

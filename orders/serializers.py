@@ -32,7 +32,10 @@ class OrderSerializer(serializers.ModelSerializer):
         for cart_item in cart_items:
             product = cart_item.product
             quantity = cart_item.quantity
-            price = product.price  # Ensure product has `price` field
+            price = product.price 
+
+            if product.stock < quantity:
+                raise serializers.ValidationError("limited sock")
 
             OrderItem.objects.create(
                 order=order,
@@ -42,6 +45,11 @@ class OrderSerializer(serializers.ModelSerializer):
             )
 
             total_price += price * quantity
+            product.stock -= quantity
+            product.save()
+
+            
+
 
         order.total_price = total_price
         order.save()
