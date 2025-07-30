@@ -19,6 +19,15 @@ class BaseTest(APITestCase):
             password ='12345'
         )
 
+        self.staff = Account.objects.create_user(
+            email='staff@gmailcom',
+            first_name = 'johny',
+            last_name ='diss',
+            username ='sley',
+            password ='12345',
+            role = 'staff'
+        )
+
         self.product_url = reverse('product')
         self.category_url = reverse('category')
         self.cart_url = reverse('cart')

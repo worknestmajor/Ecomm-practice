@@ -1,5 +1,5 @@
 from .test_base import BaseTest
-from accounts.models import Account
+# from accounts.models import Account
 
 
 class AccountTest(BaseTest):

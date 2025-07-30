@@ -3,7 +3,7 @@ from .test_base import BaseTest
 from rest_framework import status
 from product.models import Products
 from category.models import Category
-from orders.models import Order,OrderItem
+# from orders.models import Order,OrderItem
 
 class OrderTest(BaseTest):
     def setUp(self):

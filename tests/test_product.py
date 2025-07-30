@@ -46,5 +46,5 @@ class ProductModelTest(BaseTest):
         self.client.force_authenticate(user=self.admin)
         url = self.product_detail_url(product.id)
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(Products.objects.count(), 0)
