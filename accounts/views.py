@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from orders.models import Order
 from orders.serializers import OrderSerializer
 from django.contrib.auth import authenticate, logout
-from drf_spectacular.utils import extend_schema 
+from drf_spectacular.utils import extend_schema, OpenApiExample
 # from drf_spectacular.types import OpenApiTypes
 # Create your views here.
 
@@ -18,6 +18,39 @@ class RegisterView(APIView):
     serializer_class = AccountSerializer
     permission_classes=[AllowAny]
 
+    @extend_schema(
+            description="**This is used to register new user**",
+            examples=[
+                OpenApiExample(
+                    name='accounts'
+                    ,description='Request for Creating new user'
+                    ,value={
+                        "first_name": "John",
+                        "last_name": "doe",
+                        "email": "john@example.com",
+                        "username": "johny",
+                        "password": "12345"
+                        },
+                    request_only = True
+                    
+                ),
+                OpenApiExample(
+                    name='accounts'
+                    ,description='REsponse after Creating new staff'
+                    ,value={
+                        "id": 1,
+                        "first_name": "john",
+                        "last_name": "doe",
+                        "email": "john@example.com",
+                        "username": "johny"
+                        },
+                    response_only = True
+                    
+                )
+                
+
+            ],
+    )
     def post(self, request, *args,**kwargs):
         serializer = self.serializer_class(data= request.data)
         if serializer.is_valid():
@@ -28,6 +61,9 @@ class RegisterView(APIView):
 class AdminView(APIView):
     permission_classes =[IsAuthenticated, IsAdmin]
 
+    @extend_schema(
+            description="**This is used by admin to view all users with thier orders**"
+    )
     def get(self, request):
         data =[]
         users = Account.objects.all()
@@ -50,8 +86,40 @@ class CreateStaffView(APIView):
     permission_classes = [IsAuthenticated, IsAdmin] 
 
     @extend_schema(
+            description="**Create a new staff**",
             request=AccountSerializer,
-            responses=AccountSerializer
+            responses=AccountSerializer,
+            examples=[
+                OpenApiExample(
+                    name='accounts'
+                    ,description='Request for Creating new staff'
+                    ,value={
+                       
+                        "first_name": "john",
+                        "last_name": "doe",
+                        "email": "john@example.com",
+                        "username": "johny",
+                        "password":"12345"
+                        },
+                    request_only = True
+                    
+                ),
+                OpenApiExample(
+                    name='accounts'
+                    ,description='REsponse after Creating new staff'
+                    ,value={
+                        "id": 1,
+                        "first_name": "john",
+                        "last_name": "doe",
+                        "email": "john@example.com",
+                        "username": "johny"
+                        },
+                    response_only = True
+                    
+                )
+                
+
+            ],
     )
 
     def post(self, request, *args, **kwargs):
@@ -72,6 +140,9 @@ class DeleteStaffView(APIView):
     serializer_class = AccountSerializer
     permission_classes =[IsAuthenticated,IsAdmin]
 
+    @extend_schema(
+            description="**This is used to delete a staff member**"
+    )
     def delete(self, request , **kwargs):
         username = kwargs.get('username')
         if username:
@@ -140,6 +211,9 @@ class LoginView(APIView):
 class LogoutView(APIView):
     permission_classes=[IsAuthenticated]
 
+    @extend_schema(
+            description="**This is used logout*"
+    )
     def post(self, request):
         logout(request)
         return Response({"message":"successfully Logged out"})

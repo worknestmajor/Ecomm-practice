@@ -48,13 +48,8 @@ class OrderSerializer(serializers.ModelSerializer):
             product.stock -= quantity
             product.save()
 
-            
-
-
         order.total_price = total_price
         order.save()
-
-        # Clear the user's cart
         cart_items.delete()
 
         return order

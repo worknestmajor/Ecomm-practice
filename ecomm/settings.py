@@ -144,3 +144,18 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.Account'
+
+SPECTACULAR_SETTINGS ={
+    'TITLE': 'E-commerce API',
+    'DESCRIPTION': """
+### Overview
+This API provides endpoints for:
+- **Products**
+- **Category**
+- **Accounts**
+- **cart**
+- **orders**
+### Authentication
+Use token-based authentication
+"""
+}

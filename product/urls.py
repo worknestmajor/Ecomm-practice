@@ -5,3 +5,4 @@ urlpatterns =[
     path("products", ProductView.as_view(), name="product"),
     path("products/<int:id>", ProductView.as_view(),name="product-detail")
 ]
+

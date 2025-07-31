@@ -7,10 +7,13 @@ from .models import Carts
 from .serializers import CartSerializer
 # from product.models import Products
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema,OpenApiExample
 class CartView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+            description="**Get all cart Items**"
+    )
     def get(self, request):
         cart = Carts.objects.filter(user=request.user)
         serializer = CartSerializer(cart, many=True)
@@ -18,9 +21,36 @@ class CartView(APIView):
     
 
     @extend_schema(
+            
             request=CartSerializer,
             responses=CartSerializer,
-            description="Create Cart"
+            description="Create new Cart item",
+            examples=[
+                OpenApiExample(
+                    name='cart'
+                    ,description='Create new cart item'
+                    ,value={
+                        "product": 1,
+                        "quantity": 1
+                    },
+                    request_only = True
+                    
+                ),
+                OpenApiExample(
+                    name='cart'
+                    ,description='Create new cart item'
+                    ,value={
+                        "id": 1,
+                        "product": 1,
+                        "p_name": "product_name",
+                        "quantity": 1
+                    },
+                    response_only = True
+                    
+                )
+                
+
+            ],
     )
     def post(self, request):
         serializer = CartSerializer(data=request.data)
@@ -40,6 +70,9 @@ class CartView(APIView):
             return Response(CartSerializer(cart_item).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(
+            description="**This is used to delete an item in cart**"
+    )
     def delete(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         if not pk:

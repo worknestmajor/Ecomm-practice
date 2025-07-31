@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from base.permissions import IsAdmin, IsAdminOrStaff,SAFE_METHODS
+from drf_spectacular.utils import extend_schema
 
 # Create your views here.
 
@@ -21,6 +22,9 @@ class BaseView(APIView):
             return [IsAuthenticated(), IsAdminOrStaff()]
 
 
+    @extend_schema(
+            description="**This is used to get item or items**"
+    )
     def get(self, request,  **kwargs):
         obj_id = kwargs.get("id")
         if obj_id:
@@ -33,7 +37,10 @@ class BaseView(APIView):
             queryset = self.model.objects.get_all()
             serializer = self.serializer_class(queryset, many=True)
             return Response({"message":serializer.data})
-            
+
+    @extend_schema(
+            description="**This is used to create new item**"
+    )        
     def post(self, request,**kwargs):
         serializer = self.serializer_class(data= request.data)
         if serializer.is_valid():
@@ -41,6 +48,9 @@ class BaseView(APIView):
             return Response({"message":self.serializer_class(obj).data})
         return Response(serializer.errors)
     
+    @extend_schema(
+            description="**This is used to update an item**"
+    )
     def put(self,request ,**kwargs):
         obj_id = kwargs.get('id')
         if not obj_id:
@@ -53,6 +63,9 @@ class BaseView(APIView):
             serializer.save()
             return Response({"message":"item has been updated"})
     
+    @extend_schema(
+            description="**This is used to partially update an item**"
+    )
     def patch(self,request ,**kwargs):
         obj_id = kwargs.get('id')
         if not obj_id:
@@ -65,6 +78,9 @@ class BaseView(APIView):
             serializer.save()
             return Response({"message":"item has been updated"})
     
+    @extend_schema(
+            description="**This is used to delete an item**"
+    )
     def delete(self,request, **kwargs):
         obj_id = kwargs.get("id")
         if not obj_id:
